@@ -241,14 +241,20 @@ copyButton.on("click", function() {
 update.on("click", async function() {
   if (bankAddress != "") {
     let ethBalance = await web3.eth.getBalance(nowAccount);
+    
     let bankBalance = await bank.methods
       .getBankBalance()
+      .call({ from: nowAccount });
+      
+    let CertificateDeposit = await bank.methods
+      .getCertificateDeposit()
       .call({ from: nowAccount });
 
     log({
       address: bankAddress,
       ethBalance: ethBalance,
-      bankBalance: bankBalance
+      bankBalance: bankBalance,
+      CertificateDeposit: CertificateDeposit
     });
     log("更新帳戶資料");
 
