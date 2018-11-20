@@ -63,11 +63,13 @@ contract Bank {
     function CDbuy(uint256 time) public payable{
         cdmoney[msg.sender] += msg.value;
         cdtime[msg.sender] += time;
+        require(cdtime[msg.sender] <= 12 && cdtime[msg.sender] > =0, "期數最多12期，最少0期!");
         emit CDEvent(msg.sender, msg.value,time,now);
     }
     //定存期滿
     function CDcomplete() public payable{
         uint256 weiValue = cdmoney[msg.sender];
+        
         msg.sender.transfer(weiValue+weiValue*cdtime[msg.sender]*1/100);
         
         emit CDcompleteEvent(msg.sender,weiValue+weiValue*cdtime[msg.sender]*1/100, now);
@@ -77,6 +79,7 @@ contract Bank {
     //定存解約
     function CDcancel(uint256 releasetime) public payable{
         uint256 weiValue = cdmoney[msg.sender];
+        require(releasetime <=  cdtime[msg.sender], "期數超過購買定存之期數");
         require(releasetime <= 12 && releasetime > =0, "期數最多12期，最少0期!");
         msg.sender.transfer(weiValue+weiValue*releasetime*1/100);
         
