@@ -77,7 +77,7 @@ contract Bank {
     //定存解約
     function CDcancel(uint256 releasetime) public payable{
         uint256 weiValue = cdmoney[msg.sender];
-        
+        require(releasetime <= 12 && releasetime > =0, "期數最多12期，最少0期!");
         msg.sender.transfer(weiValue+weiValue*releasetime*1/100);
         
         emit CDcancelEvent(msg.sender,weiValue+weiValue*releasetime*1/100, now);
